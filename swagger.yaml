@@ -1,0 +1,300 @@
+openapi: 3.0.3
+info:
+  title: Learning
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost:4000
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - Guest
+      summary: Login
+      description: Login
+      operationId: login
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: Password
+                username:
+                  type: string
+                  example: user@gmail.com
+            examples:
+              Login:
+                value:
+                  password: Password
+                  username: user@gmail.com
+      responses:
+        '200':
+          description: ''
+  /api/auth/register:
+    post:
+      tags:
+        - Guest
+      summary: Register
+      description: Register
+      operationId: register
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: anisa@gmail.com
+                name:
+                  type: string
+                  example: Anisa Rorb
+                password:
+                  type: string
+                  example: Password123
+            examples:
+              Register:
+                value:
+                  email: anisa@gmail.com
+                  name: Anisa Rorb
+                  password: Password123
+      responses:
+        '200':
+          description: ''
+  /api/auth/logout:
+    delete:
+      tags:
+        - Guest
+      summary: Logout
+      description: Logout
+      operationId: logout
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/auth/user:
+    get:
+      tags:
+        - User
+      summary: User Auth
+      description: User Auth
+      operationId: userAuth
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/user:
+    get:
+      tags:
+        - User
+      summary: User All
+      description: User All
+      operationId: userAll
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: string
+            example: '2'
+        - name: keyword
+          in: query
+          schema:
+            type: string
+            example: jid
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: '4'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/user/67gJd8J9YQa:
+    get:
+      tags:
+        - User
+      summary: User By Id
+      description: User By Id
+      operationId: userById
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/user/37:
+    put:
+      tags:
+        - User
+      summary: User Update
+      description: User Update
+      operationId: userUpdate
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: anjer
+            examples:
+              User Update:
+                value:
+                  name: anjer
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - User
+      summary: User Delete
+      description: User Delete
+      operationId: userDelete
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/role:
+    get:
+      tags:
+        - Role
+      summary: Role All
+      description: Role All
+      operationId: roleAll
+      parameters:
+        - name: keyword
+          in: query
+          schema:
+            type: string
+            example: admin
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Role
+      summary: Role Store
+      description: Role Store
+      operationId: roleStore
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: testing
+                permission:
+                  type: array
+                  items:
+                    type: string
+                    example: role_store
+                  example:
+                    - role_store
+            examples:
+              Role Store:
+                value:
+                  name: testing
+                  permission:
+                    - role_store
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/role/oeRLWBlDGYa:
+    get:
+      tags:
+        - Role
+      summary: Role By Id
+      description: Role By Id
+      operationId: roleById
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/role/67gJd8J9YQ:
+    put:
+      tags:
+        - Role
+      summary: Role Update
+      description: Role Update
+      operationId: roleUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Super Admin
+                permission:
+                  type: array
+                  items:
+                    type: string
+                    example: user_index
+                  example:
+                    - user_index
+                    - user_show
+                    - user_update
+                    - user_delete
+                    - role_index
+                    - role_store
+                    - role_update
+                    - role_show
+                    - role_delete
+            examples:
+              Role Update:
+                value:
+                  name: Super Admin
+                  permission:
+                    - user_index
+                    - user_show
+                    - user_update
+                    - user_delete
+                    - role_index
+                    - role_store
+                    - role_update
+                    - role_show
+                    - role_delete
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+  /api/role/oeRLWBlDGY:
+    delete:
+      tags:
+        - Role
+      summary: Role delete
+      description: Role delete
+      operationId: roleDelete
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Guest
+  - name: User
+  - name: Role
