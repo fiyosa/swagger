@@ -13,6 +13,9 @@ switchButton.style.backgroundImage = 'linear-gradient(to right, #4e54c8, #8f94fb
 
 document.body.appendChild(switchButton);
 
+// Load default light mode
+document.getElementById('theme').setAttribute('href', './swagger/style.css');
+
 // Event listener for the toggle button
 switchButton.addEventListener('click', function() {
   // Check if the current mode is light mode or dark mode
