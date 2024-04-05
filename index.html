@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>Swagger</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="initial-scale=1, width=device-width" />
-  <title>Swagger</title>
+    <link rel="icon" type="image/svg" href="./swagger/swagger_icon.svg" />
+    <link rel="manifest" href="./swagger/manifest.json" />
+    <link rel="stylesheet" href="./swagger/style.css" />
+    <link rel="stylesheet" href="./swagger/dark-mode.css" id="theme" />
+  </head>
 
-  <link rel="icon" type="image/svg" href="./swagger/swagger_icon.svg" />
-  <link rel="manifest" href="./swagger/manifest.json" />
-  <link rel="stylesheet" href="./swagger/style.css">
-  <link rel="stylesheet" href="./swagger/dark-mode.css" id="theme">
-</head>
+  <body>
+    <script src="./swagger/dark-mode.js"></script>
 
-<body>
-  <script src="./swagger/dark-mode.js"></script>
+    <div id="swagger-ui"></div>
 
-  <div id="swagger-ui"></div>
-  
-  <script src="./swagger/jquery-2.1.4.min.js"></script>
-  <script src="./swagger/swagger-bundle.js"></script>
+    <script src="./swagger/jquery-2.1.4.min.js"></script>
+    <script src="./swagger/swagger-bundle.js"></script>
 
-  <script type="application/javascript">
-    const ui = SwaggerUIBundle({
-      url: "./swagger.yaml",
-      dom_id: '#swagger-ui',
-      docExpansion: 'none'
-    });
-  </script>
-</body>
+    <script type="application/javascript">
+      const ui = SwaggerUIBundle({
+        url: './swagger.yaml',
+        dom_id: '#swagger-ui',
+        docExpansion: 'none',
+      })
+    </script>
+  </body>
 </html>

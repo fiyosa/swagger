@@ -11,10 +11,10 @@ servers:
     variables:
       port:
         enum:
-          - "44333"
-          - "8990"
-        default: "8990"
-        description: "asdad"
+          - '44333'
+          - '8990'
+        default: '8990'
+        description: 'asdad'
 tags:
   - name: Guest
   - name: User
@@ -303,7 +303,7 @@ paths:
           description: ''
       security:
         - bearerAuth: []
-components:    
+components:
   securitySchemes:
     bearerAuth:
       type: http
