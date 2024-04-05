@@ -2,9 +2,23 @@ openapi: 3.0.3
 info:
   title: Learning
   version: 1.0.0
-  contact: {}
+externalDocs:
+  description: Back to Menu
+  url: ../
 servers:
-  - url: http://localhost:4000
+  - url: https://api.jikan.moe/v4
+  - url: http://localhost:{port}
+    variables:
+      port:
+        enum:
+          - "44333"
+          - "8990"
+        default: "8990"
+        description: "asdad"
+tags:
+  - name: Guest
+  - name: User
+  - name: Role
 paths:
   /api/auth/login:
     post:
@@ -289,12 +303,8 @@ paths:
           description: ''
       security:
         - bearerAuth: []
-components:
+components:    
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-tags:
-  - name: Guest
-  - name: User
-  - name: Role
