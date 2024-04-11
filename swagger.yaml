@@ -7,304 +7,581 @@ externalDocs:
   url: ../
 servers:
   - url: https://api.jikan.moe/v4
-  - url: http://localhost:{port}
+  - url: http://localhost:{port}/api
     variables:
       port:
         enum:
-          - '44333'
-          - '8990'
-        default: '8990'
-        description: 'asdad'
+          - '4000'
+          - '3000'
+        default: '4000'
 tags:
   - name: Guest
-  - name: User
-  - name: Role
+  - name: Anime
 paths:
-  /api/auth/login:
+  /login:
     post:
       tags:
         - Guest
-      summary: Login
-      description: Login
-      operationId: login
+      summary: Login user
+      operationId: loginUser
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              type: object
-              properties:
-                password:
-                  type: string
-                  example: Password
-                username:
-                  type: string
-                  example: user@gmail.com
-            examples:
-              Login:
-                value:
-                  password: Password
-                  username: user@gmail.com
-      responses:
-        '200':
-          description: ''
-  /api/auth/register:
-    post:
-      tags:
-        - Guest
-      summary: Register
-      description: Register
-      operationId: register
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: anisa@gmail.com
-                name:
-                  type: string
-                  example: Anisa Rorb
-                password:
-                  type: string
-                  example: Password123
-            examples:
-              Register:
-                value:
-                  email: anisa@gmail.com
-                  name: Anisa Rorb
-                  password: Password123
-      responses:
-        '200':
-          description: ''
-  /api/auth/logout:
-    delete:
-      tags:
-        - Guest
-      summary: Logout
-      description: Logout
-      operationId: logout
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/auth/user:
-    get:
-      tags:
-        - User
-      summary: User Auth
-      description: User Auth
-      operationId: userAuth
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/user:
-    get:
-      tags:
-        - User
-      summary: User All
-      description: User All
-      operationId: userAll
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: string
-            example: '2'
-        - name: keyword
-          in: query
-          schema:
-            type: string
-            example: jid
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: '4'
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/user/67gJd8J9YQa:
-    get:
-      tags:
-        - User
-      summary: User By Id
-      description: User By Id
-      operationId: userById
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/user/37:
-    put:
-      tags:
-        - User
-      summary: User Update
-      description: User Update
-      operationId: userUpdate
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: anjer
-            examples:
-              User Update:
-                value:
-                  name: anjer
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-    delete:
-      tags:
-        - User
-      summary: User Delete
-      description: User Delete
-      operationId: userDelete
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/role:
-    get:
-      tags:
-        - Role
-      summary: Role All
-      description: Role All
-      operationId: roleAll
-      parameters:
-        - name: keyword
-          in: query
-          schema:
-            type: string
-            example: admin
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
-    post:
-      tags:
-        - Role
-      summary: Role Store
-      description: Role Store
-      operationId: roleStore
-      requestBody:
-        content:
+              $ref: '#/components/schemas/ReqLoginUser'
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: testing
-                permission:
-                  type: array
-                  items:
-                    type: string
-                    example: role_store
-                  example:
-                    - role_store
-            examples:
-              Role Store:
-                value:
-                  name: testing
-                  permission:
-                    - role_store
+              $ref: '#/components/schemas/ReqLoginUser'
       responses:
         '200':
-          description: ''
+          description: Token retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /logout:
+    post:
+      tags:
+        - 'Guest'
+      operationId: logoutUser
+      summary: Logout User
       security:
         - bearerAuth: []
-  /api/role/oeRLWBlDGYa:
+
+      responses:
+        '200':
+          description: Logout successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /anime/{id}/full:
     get:
       tags:
-        - Role
-      summary: Role By Id
-      description: Role By Id
-      operationId: roleById
+        - Anime
+      summary: Get Anime Full By Id
+      operationId: getAnimeFullById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/role/67gJd8J9YQ:
-    put:
+          $ref: '#/components/responses/successWithData'
+        '400':
+          $ref: '#/components/responses/404'
+  /anime:
+    get:
       tags:
-        - Role
-      summary: Role Update
-      description: Role Update
-      operationId: roleUpdate
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Super Admin
-                permission:
-                  type: array
-                  items:
-                    type: string
-                    example: user_index
-                  example:
-                    - user_index
-                    - user_show
-                    - user_update
-                    - user_delete
-                    - role_index
-                    - role_store
-                    - role_update
-                    - role_show
-                    - role_delete
-            examples:
-              Role Update:
-                value:
-                  name: Super Admin
-                  permission:
-                    - user_index
-                    - user_show
-                    - user_update
-                    - user_delete
-                    - role_index
-                    - role_store
-                    - role_update
-                    - role_show
-                    - role_delete
+        - Anime
+      summary: Get Anime Search
+      operationId: getAnimeSearch
+      parameters:
+        - $ref: '#/components/parameters/unapproved'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/type'
+        - $ref: '#/components/parameters/score'
+        - $ref: '#/components/parameters/min_score'
+        - $ref: '#/components/parameters/max_score'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/rating'
+        - $ref: '#/components/parameters/sfw'
+        - $ref: '#/components/parameters/genres'
+        - $ref: '#/components/parameters/genres_exclude'
+        - $ref: '#/components/parameters/order_by'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/producers'
+        - $ref: '#/components/parameters/start_date'
+        - $ref: '#/components/parameters/end_date'
       responses:
         '200':
-          description: ''
-      security:
-        - bearerAuth: []
-  /api/role/oeRLWBlDGY:
-    delete:
-      tags:
-        - Role
-      summary: Role delete
-      description: Role delete
-      operationId: roleDelete
-      responses:
-        '200':
-          description: ''
-      security:
-        - bearerAuth: []
+          $ref: '#/components/responses/successFull'
+        '400':
+          $ref: '#/components/responses/400'
 components:
+  parameters:
+    unapproved:
+      in: query
+      name: unapproved
+      description: 'This is a flag. When supplied it will include entries which are unapproved. Unapproved entries on MyAnimeList are those that are user submitted and have not yet been approved by MAL to show up on other pages. They will have their own specifc pages and are often removed resulting in a 404 error. You do not need to pass a value to it.'
+      schema:
+        type: boolean
+    page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+    limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 25
+    q:
+      in: query
+      name: q
+      schema:
+        type: string
+        minimum: 1
+    type:
+      in: query
+      name: type
+      schema:
+        type: string
+        enum:
+          - tv
+          - movie
+          - ova
+          - special
+          - ona
+          - music
+          - cm
+          - pv
+          - tv_special
+    score:
+      in: query
+      name: score
+      schema:
+        type: integer
+    min_score:
+      in: query
+      name: min_score
+      schema:
+        type: integer
+    max_score:
+      in: query
+      name: max_score
+      schema:
+        type: integer
+    status:
+      in: query
+      name: status
+      schema:
+        type: integer
+        enum:
+          - airing
+          - complete
+          - upcoming
+    rating:
+      name: rating
+      in: query
+      schema:
+        type: string
+        enum:
+          - 'g'
+          - 'pg'
+          - 'pg13'
+          - 'r17'
+          - 'r'
+          - 'rx'
+      description: >
+        Dictionary:
+          * G - All Ages
+          * PG - Children
+          * PG-13 - Teens 13 or older
+          * R - 17+ (violence & profanity)
+          * R+ - Mild Nudity
+          * Rx - Hentai
+    sfw:
+      name: sfw
+      in: query
+      schema:
+        type: boolean
+      description: "'Safe For Work'. This is a flag. When supplied it will filter out entries according to the SFW Policy. You do not need to pass a value to it."
+    genres:
+      name: genres
+      in: query
+      schema:
+        type: string
+      description: Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter.
+    genres_exclude:
+      name: genres_exclude
+      in: query
+      schema:
+        type: string
+      description: Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter.
+    order_by:
+      name: order_by
+      in: query
+      schema:
+        type: string
+        enum:
+          - 'mal_id'
+          - 'title'
+          - 'start_date'
+          - 'end_date'
+          - 'episodes'
+          - 'score'
+          - 'scored_by'
+          - 'rank'
+          - 'popularity'
+          - 'members'
+          - 'favorites'
+      description: Sort results by the specified field.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        enum:
+          - 'desc'
+          - 'asc'
+      description: Sort results in descending or ascending order.
+    producers:
+      name: producers
+      in: query
+      schema:
+        type: string
+      description: Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter.
+    start_date:
+      name: start_date
+      in: query
+      schema:
+        type: string
+      description: 'Filter by starting date. Format: YYYY-MM-DD. e.g 2022, 2005-05, 2005-01-01'
+    end_date:
+      name: end_date
+      in: query
+      schema:
+        type: string
+      description: 'Filter by ending date. Format: YYYY-MM-DD. e.g 2022, 2005-05, 2005-01-01'
+  schemas:
+    ReqLoginUser:
+      required:
+        - 'username'
+        - 'password'
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    ResSuccess:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResSuccessData'
+        pagination:
+          $ref: '#/components/schemas/ResSuccessPagination'
+    ResSuccessData:
+      type: object
+      properties:
+        mal_id:
+          type: integer
+        url:
+          type: string
+        images:
+          type: object
+          properties:
+            jpg:
+              type: object
+              properties:
+                image_url:
+                  type: string
+                small_image_url:
+                  type: string
+                large_image_url:
+                  type: string
+            webp:
+              type: object
+              properties:
+                image_url:
+                  type: string
+                small_image_url:
+                  type: string
+                large_image_url:
+                  type: string
+        trailer:
+          type: object
+          properties:
+            youtube_id:
+              type: string
+            url:
+              type: string
+            embed_url:
+              type: string
+        approved:
+          type: boolean
+        titles:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              title:
+                type: string
+        title:
+          type: string
+        title_english:
+          type: string
+        title_japanese:
+          type: string
+        title_synonyms:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+        source:
+          type: string
+        episodes:
+          type: integer
+        status:
+          type: string
+        airing:
+          type: boolean
+        aired:
+          type: object
+          properties:
+            from:
+              type: object
+              properties:
+                day:
+                  type: integer
+                month:
+                  type: integer
+                year:
+                  type: integer
+            to:
+              type: object
+              properties:
+                day:
+                  type: integer
+                month:
+                  type: integer
+                year:
+                  type: integer
+            prop:
+              type: string
+        duration:
+          type: string
+        rating:
+          type: string
+        score:
+          type: number
+        scored_by:
+          type: integer
+        rank:
+          type: integer
+        popularity:
+          type: integer
+        members:
+          type: integer
+        favorites:
+          type: integer
+        synopsis:
+          type: string
+        background:
+          type: string
+        season:
+          type: string
+        year:
+          type: integer
+        broadcast:
+          type: object
+          properties:
+            day:
+              type: string
+            time:
+              type: string
+            timezone:
+              type: string
+            string:
+              type: string
+        producers:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        licensors:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        studios:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        genres:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        explicit_genres:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        themes:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+        demographics:
+          type: array
+          items:
+            type: object
+            properties:
+              mal_id:
+                type: integer
+              type:
+                type: string
+              name:
+                type: string
+              url:
+                type: string
+    ResSuccessPagination:
+      type: object
+      properties:
+        last_visible_page:
+          type: integer
+        has_next_page:
+          type: boolean
+        items:
+          type: object
+          properties:
+            count:
+              type: integer
+            total:
+              type: integer
+            per_page:
+              type: integer
+    ResError:
+      type: object
+      properties:
+        status:
+          type: string
+        type:
+          type: string
+        messages:
+          type: string
+        limit:
+          type: string
+        error:
+          type: string
+    ResErrorWithParameter:
+      type: object
+      properties:
+        status:
+          type: string
+        type:
+          type: string
+        messages:
+          type: object
+          properties:
+            string:
+              type: array
+              items:
+                type: string
+        limit:
+          type: string
+        error:
+          type: string
+  responses:
+    successFull:
+      description: 'The request was successful'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResSuccess'
+    successWithData:
+      description: 'The request was successful'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResSuccessData'
+    400:
+      description: "You've made an invalid request. Recheck documentation"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResErrorWithParameter'
+    404:
+      description: "You've made an invalid request. Recheck documentation"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResError'
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
